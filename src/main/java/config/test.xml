@@ -20,12 +20,15 @@
         <property name="location" value="/tmp/" />
         <property name="dbNames">
             <list>
-                <value>db</value>
+                <value>db1</value>
             </list>
         </property>
+        <property name="name" value="DBService" />
 
     </bean>
 
+    <bean id="graphdb.DBQueryTest" class="graphdb.DBQueryTest">
+    </bean>
 
 </beans>
 

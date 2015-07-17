@@ -1,7 +1,9 @@
 package graphdb;
 
+import graphdb.*;
 import query.Request;
 import query.Response;
+import server.Server;
 import server.Service;
 
 import java.io.BufferedReader;
@@ -14,58 +16,14 @@ import java.util.Map;
 /**
  * Created by mkhanwalkar on 7/17/15.
  */
-public class DBService implements Service {
+public class DBQueryTest implements Service {
 
 
-    String location;
-    List<String> dbNames;
-
-    String name ;
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public List<String> getDbNames() {
-        return dbNames;
-    }
-
-    public void setDbNames(List<String> dbNames) {
-        this.dbNames = dbNames;
-    }
-
-    Map<String,GraphDB> databases = new HashMap<>();
-
-    public Map<String, GraphDB> getDatabases() {
-        return databases;
-    }
-
-    public void setDatabases(Map<String, GraphDB> databases) {
-        this.databases = databases;
-    }
 
     @Override
     public void init() {
 
-        for (String name : dbNames) {
 
-            GraphDB db = GraphDbFactory.getInstance().createDB(location+name);
-
-            db.restore();
-
-            databases.put(name,db);
-        }
-
-
-    }
-
-    public GraphDB getDatabase(String name)
-    {
-        return databases.get(name);
     }
 
     private static NodeType getType(String s)
@@ -89,11 +47,12 @@ public class DBService implements Service {
     @Override
     public void start() {
 
+        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("DB1");
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
 
             String s = null ;
-            GraphDB db = databases.get("db1");
             while ((s=reader.readLine()) != null)
             {
                 //  System.out.println(s);
@@ -113,7 +72,7 @@ public class DBService implements Service {
             Request request = new Request();
             request.setId("DP1");
             request.setType(NodeType.DP);
-            Response response = databases.get("db1").query(request);
+            Response response = db.query(request);
 
             System.out.println(response);
         } catch (IOException e) {
@@ -140,9 +99,6 @@ public class DBService implements Service {
     @Override
     public void destroy() {
 
-
-        for (GraphDB db : databases.values())
-            db.save();
 
 
     }

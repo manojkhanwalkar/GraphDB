@@ -90,7 +90,7 @@ public class Server {
     }
 
     public void stop() {
-        log.info("Stopping Services");
+   //     log.info("Stopping Services");
 
         for (Service s : list.getServices()) {
             s.stop();
@@ -111,9 +111,10 @@ public class Server {
     }
 
     public void destroy() {
+
         List<Service> services = new ArrayList<Service>(list.getServices());
 
-        for (int i = services.size() - 1; i > 0; i--) {
+        for (int i = services.size() - 1; i >= 0; i--) {
             Service service = services.get(i);
             service.destroy();
         }
@@ -122,13 +123,6 @@ public class Server {
             notify();
         }
 
-   /*     log.info("Exiting JVM...");
-        new Thread("App-exit") {
-            @Override
-            public void run() {
-                System.exit(0);
-            }
-        }.start();*/
     }
 
     public ApplicationContext getContext() {
@@ -139,7 +133,8 @@ public class Server {
     public static void main(String[] args) {
         Server s = Server.getInstance();
         s.setConfig(args[0]);
-        Runtime.getRuntime().addShutdownHook(new Thread(new ServerShutDownHook(s)));
+        Thread t = new Thread(new ServerShutDownHook(s));
+        Runtime.getRuntime().addShutdownHook(t);
         try
         {
             s.init();
@@ -151,6 +146,7 @@ public class Server {
             Logger.getLog().fatal("Fatal error encountered. Shutting down.", ex);
             System.exit(-1);
         }
+
 
         System.exit(0);
     }

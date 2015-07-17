@@ -12,9 +12,9 @@ public class ServerShutDownHook implements Runnable {
 
     public void run()
     {
-        Logger.getLog().info("Shutdown signal received");
+
         server.stop();
+
         server.destroy();
-        Logger.getLog().info("Server stopped");
     }
 }
