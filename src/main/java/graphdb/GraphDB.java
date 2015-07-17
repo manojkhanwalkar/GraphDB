@@ -83,6 +83,8 @@ protected GraphDB(String fileName)
 
     private void restoreNode()
     {
+        if (!checkIfExists(nodeFileName))
+            return ;
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(nodeFileName));
@@ -103,8 +105,18 @@ protected GraphDB(String fileName)
 
     }
 
+    private boolean checkIfExists(String fileName)
+    {
+        File f = new File(fileName);
+        return f.exists();
+
+    }
+
     private void restoreRelations()
     {
+        if (!checkIfExists(relationFileName))
+            return ;
+
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(relationFileName));

@@ -32,10 +32,7 @@ public class GraphDBTest {
 
     public static void main(String[] args) throws Exception {
 
-        GraphDB db = GraphDbFactory.getInstance().createDB("/tmp/db");
-
-        db.restore();
-
+ /*
 
         BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
 
@@ -63,8 +60,7 @@ public class GraphDBTest {
 
         System.out.println(response);
 
-
-        db.save();
+*/
 
 
 

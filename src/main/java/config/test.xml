@@ -10,10 +10,22 @@
     <bean id="ServiceList" class="server.ServiceList">
         <property name="listServices">
             <list>
+                <ref bean="DBService" />
             </list>
         </property>
 
     </bean>
+
+    <bean id="DBService" class="graphdb.DBService">
+        <property name="location" value="/tmp/" />
+        <property name="dbNames">
+            <list>
+                <value>db</value>
+            </list>
+        </property>
+
+    </bean>
+
 
 </beans>
 
