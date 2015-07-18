@@ -45,6 +45,12 @@ public class DBClientService implements Service {
 
                 }
 
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             Request request = new Request();

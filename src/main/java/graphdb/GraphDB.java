@@ -36,7 +36,8 @@ public class GraphDB {
     static ObjectMapper mapper = new ObjectMapper();
 
     public void save() {
-        save(nodeFileName, relationFileName);
+       // save(nodeFileName, relationFileName);
+        snapshot();
     }
 
 
@@ -175,6 +176,20 @@ public class GraphDB {
 
 
     public synchronized Node createOrGetNode(String id) {
+
+        Node n = maps.get(id);
+
+        if (n == null) {
+            n = new Node(id);
+            maps.put(id, n);
+        }
+
+
+        return n;
+
+    }
+
+    public synchronized Node deleteNode(String id) {
 
         Node n = maps.get(id);
 
