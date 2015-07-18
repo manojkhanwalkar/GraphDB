@@ -11,6 +11,7 @@
         <property name="listServices">
             <list>
                 <ref bean="DBService" />
+                <ref bean="DBQueryTest" />
             </list>
         </property>
 
@@ -27,7 +28,7 @@
 
     </bean>
 
-    <bean id="graphdb.DBQueryTest" class="graphdb.DBQueryTest">
+    <bean id="DBQueryTest" class="graphdb.DBClientService">
     </bean>
 
 </beans>

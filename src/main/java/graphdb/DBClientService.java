@@ -16,38 +16,16 @@ import java.util.Map;
 /**
  * Created by mkhanwalkar on 7/17/15.
  */
-public class DBQueryTest implements Service {
+public class DBClientService implements Service {
 
 
 
-    @Override
-    public void init() {
-
-
-    }
-
-    private static NodeType getType(String s)
-    {
-        switch(s.charAt(0))
-        {
-            case 'D' :
-                return NodeType.DP;
-            case 'C' :
-                return NodeType.Cookie;
-            case 'A' :
-                return NodeType.Account;
-            case 'I' :
-                return NodeType.IP;
-            default:
-                return NodeType.General;
-        }
-    }
 
 
     @Override
     public void start() {
 
-        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("DB1");
+        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
@@ -57,11 +35,11 @@ public class DBQueryTest implements Service {
             {
                 //  System.out.println(s);
                 String[] sA = s.split(",");
-                Node dp = db.createOrGetNode(getType(sA[0]), sA[0]);
+                Node dp = db.createOrGetNode( sA[0]);
                 dp.setName(sA[0]);
                 for (int i=1;i<sA.length;i++)
                 {
-                    Node child = db.createOrGetNode(getType(sA[i]), sA[i]);
+                    Node child = db.createOrGetNode( sA[i]);
                     child.setName(sA[i]);
                     db.add(dp,child);
 
@@ -70,7 +48,7 @@ public class DBQueryTest implements Service {
             }
 
             Request request = new Request();
-            request.setId("DP1");
+            request.setId("DP54");
             request.setType(NodeType.DP);
             Response response = db.query(request);
 
@@ -81,35 +59,4 @@ public class DBQueryTest implements Service {
 
     }
 
-    @Override
-    public void stop() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-
-
-    }
-
-    @Override
-    public void setName(String s) {
-
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-}
+ }

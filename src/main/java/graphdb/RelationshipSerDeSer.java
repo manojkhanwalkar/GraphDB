@@ -8,24 +8,24 @@ public class RelationshipSerDeSer {
     String srcId;
     String tgtId ;
 
-    int srcOrdinal;
-    int tgtOrdinal ;
+  //  int srcOrdinal;
+ //   int tgtOrdinal ;
 
-    public int getSrcOrdinal() {
+  /*  public int getSrcOrdinal() {
         return srcOrdinal;
     }
 
     public void setSrcOrdinal(int srcOrdinal) {
         this.srcOrdinal = srcOrdinal;
     }
-
-    public int getTgtOrdinal() {
+*/
+  /*  public int getTgtOrdinal() {
         return tgtOrdinal;
     }
 
     public void setTgtOrdinal(int tgtOrdinal) {
         this.tgtOrdinal = tgtOrdinal;
-    }
+    }*/
 
     public RelationshipSerDeSer() {
     }

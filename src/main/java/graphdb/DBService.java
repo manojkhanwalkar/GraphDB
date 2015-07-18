@@ -86,56 +86,7 @@ public class DBService implements Service {
     }
 
 
-    @Override
-    public void start() {
 
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
-
-            String s = null ;
-            GraphDB db = databases.get("db1");
-            while ((s=reader.readLine()) != null)
-            {
-                //  System.out.println(s);
-                String[] sA = s.split(",");
-                Node dp = db.createOrGetNode(getType(sA[0]), sA[0]);
-                dp.setName(sA[0]);
-                for (int i=1;i<sA.length;i++)
-                {
-                    Node child = db.createOrGetNode(getType(sA[i]), sA[i]);
-                    child.setName(sA[i]);
-                    db.add(dp,child);
-
-                }
-
-            }
-
-            Request request = new Request();
-            request.setId("DP1");
-            request.setType(NodeType.DP);
-            Response response = databases.get("db1").query(request);
-
-            System.out.println(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void stop() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
 
     @Override
     public void destroy() {
@@ -150,10 +101,12 @@ public class DBService implements Service {
     @Override
     public void setName(String s) {
 
+        name = s;
+
     }
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 }

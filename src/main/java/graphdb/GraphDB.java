@@ -25,17 +25,12 @@ protected GraphDB(String fileName)
     String nodeFileName;
     String relationFileName;
 
-    List<Map<String,Node>> maps = new ArrayList<>(NodeType.values().length);
+    Map<String,Node> maps = new  HashMap<>();
 
     private void init()
     {
         this.nodeFileName = fileName + ".node";
         this.relationFileName = fileName + ".relation";
-        for (int i=0;i<NodeType.values().length;i++ )
-        {
-            Map<String,Node> map = new HashMap<>();
-            maps.add(map);
-        }
 
     }
 
@@ -48,8 +43,7 @@ protected GraphDB(String fileName)
             PrintWriter nodeWriter = new PrintWriter(nodeFileName);
            PrintWriter relationWriter = new PrintWriter(relationFileName);
 
-            for (Map<String,Node> map : maps) {
-                for ( Node n : map.values()) {
+                for ( Node n : maps.values()) {
                     String s = mapper.writeValueAsString(n);
                     nodeWriter.write(s);
                     nodeWriter.write("\n");
@@ -58,16 +52,15 @@ protected GraphDB(String fileName)
                     {
                         RelationshipSerDeSer r = new RelationshipSerDeSer();
                         r.setSrcId(n.getId());
-                        r.setSrcOrdinal(n.getType().ordinal());
+                        //r.setSrcOrdinal(n.getType().ordinal());
                         r.setTgtId(rs.getTarget().getId());
-                        r.setTgtOrdinal(rs.getTarget().getType().ordinal());
+                       // r.setTgtOrdinal(rs.getTarget().getType().ordinal());
 
                         String s1 = mapper.writeValueAsString(r);
                         relationWriter.write(s1);
                         relationWriter.write("\n");
                     }
                 }
-            }
 
             nodeWriter.close();
            relationWriter.close();
@@ -94,7 +87,7 @@ protected GraphDB(String fileName)
             {
 
                 Node node = mapper.readValue(s, Node.class);
-                maps.get(node.getType().ordinal()).put(node.getId(), node);
+                maps.put(node.getId(), node);
             }
             reader.close();
 
@@ -126,8 +119,8 @@ protected GraphDB(String fileName)
             {
 
                 RelationshipSerDeSer rs = mapper.readValue(s, RelationshipSerDeSer.class);
-                Node n1 = maps.get(rs.getSrcOrdinal()).get(rs.getSrcId());
-                Node n2 = maps.get(rs.getTgtOrdinal()).get(rs.getTgtId());
+                Node n1 = maps.get(rs.getSrcId());
+                Node n2 = maps.get(rs.getTgtId());
 
                 addRelationship(n1,n2);
                // maps.get(node.getType().ordinal()).put(node.getId(), node);
@@ -154,7 +147,7 @@ protected GraphDB(String fileName)
 
     public Response query(Request request)
     {
-        Node n = maps.get(request.getType().ordinal()).get(request.getId());
+        Node n = maps.get(request.getId());
         if (n!=null)
         {
             Response response = new Response();
@@ -167,13 +160,13 @@ protected GraphDB(String fileName)
 
 
 
-    public Node createOrGetNode(NodeType type , String id) {
+    public Node createOrGetNode( String id) {
 
-        Node n = maps.get(type.ordinal()).get(id);
+        Node n = maps.get(id);
 
         if (n==null) {
-            n = new Node(type,id);
-            maps.get(type.ordinal()).put(id, n);
+            n = new Node(id);
+            maps.put(id, n);
         }
 
 

@@ -14,7 +14,7 @@ public class DataCreator {
         creator.test();
     }
 
-    int start = 10; int end = 100; int tot = 10;
+    int start = 10; int end = 100; int tot = 1000;
 
     String fileName = "/Users/mkhanwalkar/test/data/input.txt";
 

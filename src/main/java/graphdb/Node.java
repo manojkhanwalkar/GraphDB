@@ -9,7 +9,7 @@ public class Node {
 
     String internalId; // TODO - to be used later .
     String id ;
-    NodeType type ;
+  //  NodeType type ;
     String name ;
     Map<String,String> properties;
 
@@ -21,9 +21,9 @@ public class Node {
     }
 
 
-    protected Node(NodeType type, String id) {
+    protected Node( String id) {
 
-        this.type = type;
+      //  this.type = type;
         this.id = id;
     }
 
@@ -44,13 +44,13 @@ public class Node {
         this.id = id;
     }
 
-    public NodeType getType() {
+   /* public NodeType getType() {
         return type;
     }
 
     public void setType(NodeType type) {
         this.type = type;
-    }
+    } */
 
     public String getName() {
         return name;
