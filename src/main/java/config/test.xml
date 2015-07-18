@@ -25,6 +25,7 @@
             </list>
         </property>
         <property name="name" value="DBService" />
+        <property name="snapShotInterval" value="5" />
 
     </bean>
 

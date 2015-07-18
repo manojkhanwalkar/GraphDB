@@ -5,14 +5,9 @@ import query.Request;
 import query.Response;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * Created by mkhanwalkar on 7/15/15.
- */
 public class GraphDB {
 
 
@@ -25,6 +20,8 @@ protected GraphDB(String fileName)
     String nodeFileName;
     String relationFileName;
 
+    final String snap = ".snap";
+
     Map<String,Node> maps = new  HashMap<>();
 
     private void init()
@@ -36,8 +33,13 @@ protected GraphDB(String fileName)
 
     static ObjectMapper mapper = new ObjectMapper();
 
-
     public void save()
+    {
+        save(nodeFileName,relationFileName);
+    }
+
+
+    private void save(String nodeFileName , String relationFileName)
     {
        try {
             PrintWriter nodeWriter = new PrintWriter(nodeFileName);
@@ -78,11 +80,11 @@ protected GraphDB(String fileName)
     {
         if (!checkIfExists(nodeFileName))
             return ;
-        BufferedReader reader = null;
+        BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(nodeFileName));
 
-            String s = null ;
+            String s  ;
             while ((s=reader.readLine())!=null)
             {
 
@@ -110,11 +112,11 @@ protected GraphDB(String fileName)
         if (!checkIfExists(relationFileName))
             return ;
 
-        BufferedReader reader = null;
+        BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(relationFileName));
 
-            String s = null ;
+            String s  ;
             while ((s=reader.readLine())!=null)
             {
 
@@ -123,7 +125,6 @@ protected GraphDB(String fileName)
                 Node n2 = maps.get(rs.getTgtId());
 
                 addRelationship(n1,n2);
-               // maps.get(node.getType().ordinal()).put(node.getId(), node);
             }
             reader.close();
 
@@ -199,4 +200,11 @@ protected GraphDB(String fileName)
         System.out.println(s);
     }
 
-   }
+    int counter=0;
+
+    public  void snapshot() {
+
+        save(nodeFileName+snap+counter,relationFileName+snap+counter);
+        counter++;
+    }
+}

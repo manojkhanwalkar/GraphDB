@@ -1,19 +1,14 @@
 package graphdb;
 
-import query.Request;
-import query.Response;
 import server.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-/**
- * Created by mkhanwalkar on 7/17/15.
- */
 public class DBService implements Service {
 
 
@@ -21,6 +16,16 @@ public class DBService implements Service {
     List<String> dbNames;
 
     String name ;
+
+    int snapShotInterval = 5;
+
+    public int getSnapShotInterval() {
+        return snapShotInterval;
+    }
+
+    public void setSnapShotInterval(int snapShotInterval) {
+        this.snapShotInterval = snapShotInterval;
+    }
 
     public String getLocation() {
         return location;
@@ -48,6 +53,9 @@ public class DBService implements Service {
         this.databases = databases;
     }
 
+    ScheduledExecutorService scheduledPool = Executors.newScheduledThreadPool(1);
+
+
     @Override
     public void init() {
 
@@ -60,6 +68,11 @@ public class DBService implements Service {
             databases.put(name,db);
         }
 
+        scheduledPool.scheduleWithFixedDelay(() -> {
+            System.out.println("Hello World");
+            databases.values().forEach(graphdb.GraphDB::snapshot);
+
+        }, snapShotInterval, snapShotInterval, TimeUnit.SECONDS);
 
     }
 
@@ -68,32 +81,23 @@ public class DBService implements Service {
         return databases.get(name);
     }
 
-    private static NodeType getType(String s)
-    {
-        switch(s.charAt(0))
-        {
-            case 'D' :
-                return NodeType.DP;
-            case 'C' :
-                return NodeType.Cookie;
-            case 'A' :
-                return NodeType.Account;
-            case 'I' :
-                return NodeType.IP;
-            default:
-                return NodeType.General;
-        }
-    }
-
 
 
 
     @Override
     public void destroy() {
 
+        try {
+            scheduledPool.shutdown();
+            scheduledPool.awaitTermination(1,TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         for (GraphDB db : databases.values())
             db.save();
+
+
 
 
     }
