@@ -5,67 +5,70 @@ import query.Request;
 import query.Response;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GraphDB {
 
 
- String fileName;
-protected GraphDB(String fileName)
-{
-    this.fileName = fileName;
-}
+    String fileName, location;
+
+    protected GraphDB(String location, String fileName) {
+        this.fileName = fileName;
+        this.location = location;
+    }
 
     String nodeFileName;
     String relationFileName;
 
     final String snap = ".snap";
 
-    Map<String,Node> maps = new  HashMap<>();
+    Map<String, Node> maps = new HashMap<>();
 
-    private void init()
-    {
-        this.nodeFileName = fileName + ".node";
+    private void init() {
+        this.nodeFileName =  fileName + ".node";
         this.relationFileName = fileName + ".relation";
 
     }
 
     static ObjectMapper mapper = new ObjectMapper();
 
-    public void save()
-    {
-        save(nodeFileName,relationFileName);
+    public void save() {
+        save(nodeFileName, relationFileName);
     }
 
 
-    private void save(String nodeFileName , String relationFileName)
-    {
-       try {
+    private synchronized  void save(String nodeFileName, String relationFileName) {
+        try {
+
+            nodeFileName = location+nodeFileName;
+            relationFileName = location+relationFileName;
+
             PrintWriter nodeWriter = new PrintWriter(nodeFileName);
-           PrintWriter relationWriter = new PrintWriter(relationFileName);
+            PrintWriter relationWriter = new PrintWriter(relationFileName);
 
-                for ( Node n : maps.values()) {
-                    String s = mapper.writeValueAsString(n);
-                    nodeWriter.write(s);
-                    nodeWriter.write("\n");
+            for (Node n : maps.values()) {
+                String s = mapper.writeValueAsString(n);
+                nodeWriter.write(s);
+                nodeWriter.write("\n");
 
-                    for (Relationship rs : n.getRelationships())
-                    {
-                        RelationshipSerDeSer r = new RelationshipSerDeSer();
-                        r.setSrcId(n.getId());
-                        //r.setSrcOrdinal(n.getType().ordinal());
-                        r.setTgtId(rs.getTarget().getId());
-                       // r.setTgtOrdinal(rs.getTarget().getType().ordinal());
+                for (Relationship rs : n.getRelationships()) {
+                    RelationshipSerDeSer r = new RelationshipSerDeSer();
+                    r.setSrcId(n.getId());
+                    //r.setSrcOrdinal(n.getType().ordinal());
+                    r.setTgtId(rs.getTarget().getId());
+                    // r.setTgtOrdinal(rs.getTarget().getType().ordinal());
 
-                        String s1 = mapper.writeValueAsString(r);
-                        relationWriter.write(s1);
-                        relationWriter.write("\n");
-                    }
+                    String s1 = mapper.writeValueAsString(r);
+                    relationWriter.write(s1);
+                    relationWriter.write("\n");
                 }
+            }
 
             nodeWriter.close();
-           relationWriter.close();
+            relationWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,99 +76,109 @@ protected GraphDB(String fileName)
         //System.out.println(maps);
 
 
-
     }
 
-    private void restoreNode()
-    {
-        if (!checkIfExists(nodeFileName))
-            return ;
+    private void restoreNode(File nodeFile) {
+        if (!checkIfExists(nodeFile))
+            return;
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(nodeFileName));
+            reader = new BufferedReader(new FileReader(nodeFile));
 
-            String s  ;
-            while ((s=reader.readLine())!=null)
-            {
+            String s;
+            while ((s = reader.readLine()) != null) {
 
                 Node node = mapper.readValue(s, Node.class);
                 maps.put(node.getId(), node);
             }
             reader.close();
 
-     //       System.out.println(maps);
-        } catch ( IOException e) {
+            //       System.out.println(maps);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private boolean checkIfExists(String fileName)
-    {
-        File f = new File(fileName);
-        return f.exists();
+    private boolean checkIfExists(File f) {
+        if (f==null)
+            return false ;
+        else
+            return f.exists();
 
     }
 
-    private void restoreRelations()
-    {
+    private void restoreRelations(File relationFileName) {
         if (!checkIfExists(relationFileName))
-            return ;
+            return;
 
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(relationFileName));
 
-            String s  ;
-            while ((s=reader.readLine())!=null)
-            {
+            String s;
+            while ((s = reader.readLine()) != null) {
 
                 RelationshipSerDeSer rs = mapper.readValue(s, RelationshipSerDeSer.class);
                 Node n1 = maps.get(rs.getSrcId());
                 Node n2 = maps.get(rs.getTgtId());
 
-                addRelationship(n1,n2);
+                addRelationship(n1, n2);
             }
             reader.close();
 
-        //    System.out.println(maps);
-        } catch ( IOException e) {
+            //    System.out.println(maps);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+   private File getLatestFile(String name) {
 
-    public void restore()
-    {
+       File directory = new File(location);
+       MyFileFilter filter = new MyFileFilter(name);
+        File[] files = directory.listFiles(filter);
+
+       if (files==null|| files.length==0)
+            return null;
+
+        Arrays.sort(files, new Comparator<File>() {
+            public int compare(File f1, File f2) {
+                return Long.compare(f1.lastModified(), f2.lastModified());
+            }
+        });
+
+        return files[files.length-1];
+    }
+
+
+    public void restore() {
         init();
-        restoreNode();
-        restoreRelations();
+        restoreNode(getLatestFile(".node."));
+        restoreRelations(getLatestFile(".relation."));
 
 //        System.out.println(maps);
 
     }
 
-    public Response query(Request request)
-    {
+    public synchronized Response query(Request request) {
         Node n = maps.get(request.getId());
-        if (n!=null)
-        {
+        if (n != null) {
             Response response = new Response();
             response.setNode(n);
-            return response ;
+            return response;
         }
 
         return null;
     }
 
 
-
-    public Node createOrGetNode( String id) {
+    public synchronized Node createOrGetNode(String id) {
 
         Node n = maps.get(id);
 
-        if (n==null) {
+        if (n == null) {
             n = new Node(id);
             maps.put(id, n);
         }
@@ -177,34 +190,50 @@ protected GraphDB(String fileName)
 
 
     // associations are added between parent and each child
-    public void add(Node parent, Node... children)
-    {
-        for (Node node : children)
-        {
-            addRelationship(parent,node);
+    public synchronized void add(Node parent, Node... children) {
+        for (Node node : children) {
+            addRelationship(parent, node);
 
         }
 
     }
 
     // Node are assumed to exist and only relationships will be added .
-    private void addRelationship(Node parent, Node child)
-    {
+    private void addRelationship(Node parent, Node child) {
         parent.addRelationship(child);
         child.addRelationship(parent);
 
     }
 
-    public void print(String s)
-    {
+    public void print(String s) {
         System.out.println(s);
     }
 
-    int counter=0;
+    int counter = 0;
 
-    public  void snapshot() {
+    public synchronized void snapshot() {
 
-        save(nodeFileName+snap+counter,relationFileName+snap+counter);
+        save(nodeFileName + snap + counter, relationFileName + snap + counter);
         counter++;
     }
+
+
+    static class MyFileFilter implements FilenameFilter {
+
+        private final String name;
+
+        public MyFileFilter(String name)
+        {
+            this.name = name ;
+        }
+
+        @Override
+        public boolean accept(File directory, String fileName) {
+            if (fileName.contains(name)) {
+                return true;
+            }
+            return false;
+        }
+    }
+
 }

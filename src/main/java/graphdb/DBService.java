@@ -61,7 +61,7 @@ public class DBService implements Service {
 
         for (String name : dbNames) {
 
-            GraphDB db = GraphDbFactory.getInstance().createDB(location+name);
+            GraphDB db = GraphDbFactory.getInstance().createDB(location,name);
 
             db.restore();
 
