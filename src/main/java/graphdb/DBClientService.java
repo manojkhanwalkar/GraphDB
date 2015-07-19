@@ -19,15 +19,11 @@ import java.util.Map;
 public class DBClientService implements Service {
 
 
+   private void addData()
+   {
+       GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
 
-
-
-    @Override
-    public void start() {
-
-        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
-
- /*       try {
+       try {
             BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
 
             String s = null ;
@@ -51,21 +47,40 @@ public class DBClientService implements Service {
                     e.printStackTrace();
                 }
 
-            } */
+            }
 
-        db.deleteNode("DP60");
+       } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+   }
+
+    private void query()
+    {
+        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
+
+//        db.deleteNode("DP60");
 
         //db.deleteRelationship("DP54","IP77");
 
         Request request = new Request();
-            request.setId("DP54");
-           // request.setType(NodeType.DP);
-            Response response = db.query(request);
+        request.setId("DP54");
+        Response response = db.query(request);
 
-            System.out.println(response);
-      /*  } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        System.out.println(response);
+
+    }
+
+
+
+
+    @Override
+    public void start() {
+
+        addData();
+
+        query();
+
 
     }
 
