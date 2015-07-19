@@ -77,7 +77,7 @@ public class DBClientService implements Service {
     @Override
     public void start() {
 
-        addData();
+      //  addData();
 
         query();
 

@@ -240,7 +240,7 @@ public class GraphDB {
         System.out.println(s);
     }
 
-    int counter = 0;
+    long counter = System.currentTimeMillis();
 
     public synchronized void snapshot() {
 
