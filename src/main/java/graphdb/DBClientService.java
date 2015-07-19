@@ -1,6 +1,7 @@
 package graphdb;
 
 import graphdb.*;
+import org.codehaus.jackson.map.ObjectMapper;
 import query.Request;
 import query.Response;
 import server.Server;
@@ -68,6 +69,20 @@ public class DBClientService implements Service {
         Response response = db.query(request);
 
         System.out.println(response);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Delta d = new Delta();
+            d.setTgtId("DP1");
+            d.setSrcId("IP1");
+            d.setOperation(DeltaOperation.AddRelation);
+            String s1 = mapper.writeValueAsString(d);
+
+            System.out.println(s1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
