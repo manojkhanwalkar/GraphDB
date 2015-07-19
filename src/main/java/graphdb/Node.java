@@ -82,6 +82,11 @@ public class Node {
         relationships.add(new Relationship(n));
     }
 
+    public void removeRelationship(Node n)
+    {
+        relationships.remove(new Relationship(n));
+    }
+
     @Override
     public String toString() {
         return "Node{" +

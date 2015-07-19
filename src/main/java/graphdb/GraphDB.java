@@ -189,17 +189,30 @@ public class GraphDB {
 
     }
 
-    public synchronized Node deleteNode(String id) {
+    public synchronized void deleteRelationship(Node n1, Node n2)
+    {
+        if (n1!=null && n2!=null)
+        {
+            n1.removeRelationship(n2);
+            n2.removeRelationship(n1);
+        }
+    }
 
-        Node n = maps.get(id);
+    public synchronized void deleteNode(String id) {
 
-        if (n == null) {
-            n = new Node(id);
-            maps.put(id, n);
+        final Node n = maps.remove(id);
+
+        /* from relationships get nodes , and for each of those nodes - delete this node from their relationship . */  //TODO
+
+        if (n != null) {
+            n.getRelationships().forEach(r -> {
+
+                r.getTarget().removeRelationship(n);
+
+            });
         }
 
 
-        return n;
 
     }
 
