@@ -10,7 +10,7 @@ public class Request
 {
 
     String id ;
-    NodeType type ;
+    //NodeType type ;
 
     public String getId() {
         return id;
@@ -20,11 +20,11 @@ public class Request
         this.id = id;
     }
 
-    public NodeType getType() {
+    /*public NodeType getType() {
         return type;
     }
 
     public void setType(NodeType type) {
         this.type = type;
-    }
+    }*/
 }

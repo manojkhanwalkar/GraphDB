@@ -59,7 +59,7 @@ public class DBClientService implements Service {
 
         Request request = new Request();
             request.setId("DP54");
-            request.setType(NodeType.DP);
+           // request.setType(NodeType.DP);
             Response response = db.query(request);
 
             System.out.println(response);
