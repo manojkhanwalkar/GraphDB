@@ -27,7 +27,7 @@ public class DBClientService implements Service {
 
         GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
 
-        try {
+ /*       try {
             BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
 
             String s = null ;
@@ -51,17 +51,21 @@ public class DBClientService implements Service {
                     e.printStackTrace();
                 }
 
-            }
+            } */
 
-            Request request = new Request();
+        db.deleteNode("DP60");
+
+        //db.deleteRelationship("DP54","IP77");
+
+        Request request = new Request();
             request.setId("DP54");
             request.setType(NodeType.DP);
             Response response = db.query(request);
 
             System.out.println(response);
-        } catch (IOException e) {
+      /*  } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

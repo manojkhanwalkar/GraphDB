@@ -189,8 +189,11 @@ public class GraphDB {
 
     }
 
-    public synchronized void deleteRelationship(Node n1, Node n2)
+    public synchronized void deleteRelationship(String  id1, String id2)
     {
+        Node n1 = maps.get(id1);
+        Node n2 = maps.get(id2);
+
         if (n1!=null && n2!=null)
         {
             n1.removeRelationship(n2);
