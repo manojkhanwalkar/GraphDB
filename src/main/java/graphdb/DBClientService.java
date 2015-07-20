@@ -42,11 +42,6 @@ public class DBClientService implements Service {
 
                 }
 
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
             }
 
@@ -70,18 +65,6 @@ public class DBClientService implements Service {
 
         System.out.println(response);
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Delta d = new Delta();
-            d.setTgtId("DP1");
-            d.setSrcId("IP1");
-            d.setOperation(DeltaOperation.AddRelation);
-            String s1 = mapper.writeValueAsString(d);
-
-            System.out.println(s1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
     }
@@ -92,7 +75,7 @@ public class DBClientService implements Service {
     @Override
     public void start() {
 
-      //  addData();
+        addData();
 
         query();
 

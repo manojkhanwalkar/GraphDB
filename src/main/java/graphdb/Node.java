@@ -95,7 +95,7 @@ public class Node {
                 '}'+'\n';
     }
 
-    protected Set<Relationship> getRelationships() {
+    public Set<Relationship> returnRelationship() {
         return relationships;
     }
 
