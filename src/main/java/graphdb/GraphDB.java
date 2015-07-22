@@ -1,5 +1,6 @@
 package graphdb;
 
+import graphdb.persistence.DeltaReader;
 import graphdb.persistence.DeltaWriter;
 import graphdb.persistence.SnapshotReader;
 import graphdb.persistence.SnapshotWriter;
@@ -19,6 +20,7 @@ public class GraphDB {
     String fileName, location;
 
     SnapshotReader snapshotReader ;
+    DeltaReader deltaReader;
     SnapshotWriter snapshotWriter;
     DeltaWriter deltaWriter;
 
@@ -29,6 +31,9 @@ public class GraphDB {
 
     String nodeFileName;
     String relationFileName;
+
+    File deltaFile ;
+
 
     final String snap = ".snap";
 
@@ -42,7 +47,7 @@ public class GraphDB {
 
         snapshotReader = new SnapshotReader(location,this);
         snapshotWriter = new SnapshotWriter(location,this);
-        deltaWriter = new DeltaWriter(location,fileName+".delta");
+        deltaReader = new DeltaReader(location,this);
 
     }
 
@@ -50,8 +55,9 @@ public class GraphDB {
 
     public void save() {
        // save(nodeFileName, relationFileName);
-        snapshot();
         deltaWriter.save();
+        snapshot();
+
     }
 
 
@@ -176,8 +182,18 @@ public class GraphDB {
     public void restore() {
 
         init();
-
         snapshotReader.restore();
+        deltaReader.restore();
+        File nodeFile =  snapshotReader.getLatestNodeFile();
+        deltaFile = deltaReader.getLatestNodeFile();
+        deltaWriter = new DeltaWriter(location,fileName+".delta");
+
+        if (deltaFile!=null && (nodeFile==null || deltaFile.lastModified() > nodeFile.lastModified()))
+        {
+            System.out.println("Delta needs to be processed");
+        }
+
+        // check if latest delta is > greater than last snapshot and if so recover the delta . This should only happen if the system has crashed.
 
         running=true;
     }

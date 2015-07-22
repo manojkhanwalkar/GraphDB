@@ -27,12 +27,13 @@ public class DeltaWriter {
         this.location = location ;
         this.fileName = fileName ;
         try {
-            writer = new PrintWriter(location+fileName+System.currentTimeMillis());
+            writer = new PrintWriter(location+fileName+"."+System.currentTimeMillis());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
     }
+
 
 
     public void write(Delta delta)

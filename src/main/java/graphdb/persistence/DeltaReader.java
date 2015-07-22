@@ -5,18 +5,19 @@ import graphdb.Node;
 import graphdb.RelationshipSerDeSer;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static graphdb.persistence.Util.checkIfExists;
 import static graphdb.persistence.Util.getLatestFile;
-
 
 
 /**
  * Created by mkhanwalkar on 7/19/15.
  */
-public class SnapshotReader {
+public class DeltaReader {
 
     static ObjectMapper mapper = new ObjectMapper();
 
@@ -25,7 +26,7 @@ public class SnapshotReader {
  //   String nodeFileName ;
  //   String relationFileName ;
     GraphDB graphDB;
-    public SnapshotReader(String location,GraphDB graphDB) {
+    public DeltaReader(String location, GraphDB graphDB) {
 
         this.location = location ;
        // this.nodeFileName = nodeFileName;
@@ -95,10 +96,10 @@ public class SnapshotReader {
 
     public void restore() {
      //   graphDB.init();
-        latestNodeFile = getLatestFile(".node.",location);
-        restoreNode(latestNodeFile);
-        restoreRelations(getLatestFile(".relation.",location));
-
+        latestNodeFile = getLatestFile(".delta.",location);
+ //       restoreNode(latestNodeFile);
+  //      restoreRelations(getLatestFile(".relation.",location));
+//
 //        System.out.println(maps);
 
     }
