@@ -5,7 +5,7 @@ package graphdb;
  */
 public class Delta {
 
-    //TODO -
+
 
     /*
 

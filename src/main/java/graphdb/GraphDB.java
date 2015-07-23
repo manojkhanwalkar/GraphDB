@@ -125,7 +125,6 @@ public class GraphDB {
             deltaWriter.write(d);
         }
 
-        /* from relationships get nodes , and for each of those nodes - delete this node from their relationship . */  //TODO
 
         if (n != null) {
             n.returnRelationship().forEach(r -> {
@@ -183,7 +182,6 @@ public class GraphDB {
 
         init();
         snapshotReader.restore();
-        deltaReader.restore();
         File nodeFile =  snapshotReader.getLatestNodeFile();
         deltaFile = deltaReader.getLatestNodeFile();
         deltaWriter = new DeltaWriter(location,fileName+".delta");
@@ -191,6 +189,7 @@ public class GraphDB {
         if (deltaFile!=null && (nodeFile==null || deltaFile.lastModified() > nodeFile.lastModified()))
         {
             System.out.println("Delta needs to be processed");
+            deltaReader.restore();
         }
 
         // check if latest delta is > greater than last snapshot and if so recover the delta . This should only happen if the system has crashed.

@@ -1,8 +1,6 @@
 package graphdb.persistence;
 
-import graphdb.GraphDB;
-import graphdb.Node;
-import graphdb.RelationshipSerDeSer;
+import graphdb.*;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -14,9 +12,8 @@ import static graphdb.persistence.Util.checkIfExists;
 import static graphdb.persistence.Util.getLatestFile;
 
 
-/**
- * Created by mkhanwalkar on 7/19/15.
- */
+//TODO - handles only a single delta file .
+
 public class DeltaReader {
 
     static ObjectMapper mapper = new ObjectMapper();
@@ -35,18 +32,39 @@ public class DeltaReader {
 
     }
 
-    private void restoreNode(File nodeFile) {
-        if (!checkIfExists(nodeFile))
+    private void restoreDelta(File deltaFile) {
+        if (!checkIfExists(deltaFile))
             return;
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(nodeFile));
+            reader = new BufferedReader(new FileReader(deltaFile));
 
             String s;
             while ((s = reader.readLine()) != null) {
 
-                Node node = mapper.readValue(s, Node.class);
-                graphDB.maps.put(node.getId(), node);
+              Delta delta = mapper.readValue(s, Delta.class);
+              switch (delta.getOperation())
+              {
+                  case AddNode :
+                      graphDB.maps.put(delta.getSrcId(), delta.getSrcNode());
+                      break ;
+                  case DeleteNode :
+                      graphDB.maps.remove(delta.getSrcId());
+                      break;
+                  case AddRelation :
+                      Node n1 = graphDB.maps.get(delta.getSrcId());
+                      Node n2 = graphDB.maps.get(delta.getTgtId());
+                      graphDB.addRelationship(n1, n2);
+                      break ;
+                  case DeleteRelation :
+                      graphDB.deleteRelationship(delta.getSrcId(),delta.getTgtId());
+                      break;
+                  default :
+                      System.out.println("Invalid operation ");
+
+
+              }
+               // graphDB.maps.put(node.getId(), node);
             }
             reader.close();
 
@@ -58,37 +76,14 @@ public class DeltaReader {
     }
 
 
-    private void restoreRelations(File relationFileName) {
-        if (!checkIfExists(relationFileName))
-            return;
-
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(relationFileName));
-
-            String s;
-            while ((s = reader.readLine()) != null) {
-
-                RelationshipSerDeSer rs = mapper.readValue(s, RelationshipSerDeSer.class);
-                Node n1 = graphDB.maps.get(rs.getSrcId());
-                Node n2 = graphDB.maps.get(rs.getTgtId());
-
-                graphDB.addRelationship(n1, n2);
-            }
-            reader.close();
-
-            //    System.out.println(maps);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
     File latestNodeFile ;
 
     public File getLatestNodeFile()
     {
+        latestNodeFile = getLatestFile(".delta.",location);
+
         return latestNodeFile;
     }
 
@@ -96,8 +91,7 @@ public class DeltaReader {
 
     public void restore() {
      //   graphDB.init();
-        latestNodeFile = getLatestFile(".delta.",location);
- //       restoreNode(latestNodeFile);
+       restoreDelta(latestNodeFile);
   //      restoreRelations(getLatestFile(".relation.",location));
 //
 //        System.out.println(maps);
