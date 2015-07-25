@@ -57,6 +57,7 @@ public class GraphDB {
        // save(nodeFileName, relationFileName);
         deltaWriter.save();
         snapshot();
+        deltaWriter= new DeltaWriter(location,fileName+".delta");
 
     }
 
@@ -172,8 +173,9 @@ public class GraphDB {
     long counter = System.currentTimeMillis();
 
     public synchronized void snapshot() {
+        deltaWriter.writeSnapShot(snapshotWriter,nodeFileName + snap + counter,relationFileName + snap + counter);
 
-        snapshotWriter.save(nodeFileName + snap + counter, relationFileName + snap + counter);
+       // snapshotWriter.save(nodeFileName + snap + counter, relationFileName + snap + counter);
         counter++;
     }
 

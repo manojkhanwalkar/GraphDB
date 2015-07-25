@@ -18,8 +18,6 @@ import java.util.concurrent.BlockingQueue;
 public class DeltaWriter {
 
     //TODO - drop out of while loop on exit after draining the queue .
-    //TODO - sequence delta and snapshots correctly
-    //TODO - after first snapshot delta is closed , have to open a new delta file .
     //TODO - there may be multiple delta from last snapshot - have to process all of them .
 
     static ObjectMapper mapper = new ObjectMapper();
@@ -71,6 +69,23 @@ public class DeltaWriter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeSnapShot(SnapshotWriter snapshotWriter, String s, String s1)
+    {
+        while (!queue.isEmpty()) {
+
+            //wait till the deltas are written before writing the snapshot .
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        snapshotWriter.save(s, s1);
+
+
     }
 
 
