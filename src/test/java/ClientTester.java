@@ -10,22 +10,35 @@ import query.Response;
 public class ClientTester {
 
     public static void main(String[] args)  throws Exception {
-        GraphDBClient client = GraphDBClient.getInstance();
-        Request request = new Request();
-        request.setId("DP5");
-        request.setOperation(DBOperation.Query);
-        request.setDbName("db1");
 
-       //  ObjectMapper mapper = new ObjectMapper();
+        for (int j=0;j<10;j++) {
 
-       // String s = mapper.writeValueAsString(request);
+            Thread t = new Thread(()-> {
 
-        //System.out.println(s);
+
+            for (int i = 0; i < 10; i++) {
+                GraphDBClient client = GraphDBClient.getInstance();
+                Request request = new Request();
+                request.setId("DP5");
+                request.setOperation(DBOperation.Query);
+                request.setDbName("db1");
+
+                //  ObjectMapper mapper = new ObjectMapper();
+
+                // String s = mapper.writeValueAsString(request);
+
+                //System.out.println(s);
 
 //
-        Response response = client.send("db1",request);
+                Response response = client.send(request);
 
-        System.out.println(response);
+                System.out.println(response);
+            }
+            });
+
+            t.start();
+
+        }
 
     }
 

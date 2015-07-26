@@ -12,12 +12,10 @@ import server.Server;
  */
 public class GraphDBClient {
 
-    RestConnector connector ;   //TODO - pool of connectors to be created later .
+    ThreadLocal<RestConnector> localConnector = new ThreadLocal<>();
 
     private GraphDBClient()
     {
-        connector = new RestConnector();
-        connector.connect();
 
     }
 
@@ -33,8 +31,17 @@ public class GraphDBClient {
     }
 
 
-    //TODO - add actual rest call here later
-    public Response send(String dbName ,Request request) {
+
+    public Response send(Request request) {
+
+        RestConnector connector = localConnector.get();
+        if (connector==null)
+        {
+            connector = new RestConnector();
+            connector.connect();
+            localConnector.set(connector);
+
+        }
 
         return connector.send(request);
 
