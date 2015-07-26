@@ -8,6 +8,15 @@ import java.io.IOException;
 
 public class Request
 {
+    String dbName ;
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
 
     DBOperation operation;
 

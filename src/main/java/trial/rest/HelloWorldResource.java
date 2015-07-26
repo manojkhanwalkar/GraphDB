@@ -35,8 +35,19 @@ public class HelloWorldResource {
     public Response sayHello(@Context HttpServletRequest hsReq, @Valid Request request) {
 
 
-        GraphDB db = ((DBService) Server.getService("DBService")).getDatabase("db1");
-        Response response = db.query(request);
+        GraphDB db = ((DBService) Server.getService("DBService")).getDatabase(request.getDbName());
+        Response response;
+
+        switch (request.getOperation())
+        {
+            case Query:
+              response   = db.query(request);
+              break ;
+            default :
+                response = null;
+
+        }
+
 
         return response;
     }

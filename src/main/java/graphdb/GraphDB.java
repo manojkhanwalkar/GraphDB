@@ -68,6 +68,7 @@ public class GraphDB {
         if (n != null) {
             Response response = new Response();
             response.setNode(n);
+            response.setRelString(n.returnRelationship().toString());
             return response;
         }
 

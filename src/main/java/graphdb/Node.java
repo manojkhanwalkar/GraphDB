@@ -44,13 +44,7 @@ public class Node {
         this.id = id;
     }
 
-   /* public NodeType getType() {
-        return type;
-    }
 
-    public void setType(NodeType type) {
-        this.type = type;
-    } */
 
     public String getName() {
         return name;

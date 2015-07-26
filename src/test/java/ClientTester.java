@@ -12,8 +12,9 @@ public class ClientTester {
     public static void main(String[] args)  throws Exception {
         GraphDBClient client = GraphDBClient.getInstance();
         Request request = new Request();
-        request.setId("DP1");
+        request.setId("DP5");
         request.setOperation(DBOperation.Query);
+        request.setDbName("db1");
 
        //  ObjectMapper mapper = new ObjectMapper();
 

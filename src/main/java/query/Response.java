@@ -11,6 +11,15 @@ public class Response {
 
     Node node ;
 
+    String relString;
+
+    public String getRelString() {
+        return relString;
+    }
+
+    public void setRelString(String relString) {
+        this.relString = relString;
+    }
 
     public Node getNode() {
         return node;
@@ -20,12 +29,11 @@ public class Response {
         this.node = node;
     }
 
-    public String toString()
-    {
-        if (node!=null)
-            return node.toString();
-        else
-            return "Hello World";
+    @Override
+    public String toString() {
+        return "Response{" +
+                "node=" + node +
+                ", relString='" + relString + '\'' +
+                '}';
     }
-
 }
