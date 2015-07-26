@@ -51,8 +51,17 @@ public class DBClientService implements Service {
 
    }
 
+    String name ;
 
+    @Override
+    public String getName() {
+        return name;
+    }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public void start() {

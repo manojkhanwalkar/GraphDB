@@ -5,9 +5,11 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class HelloWorldApplication extends Application<ExampleServiceConfiguration> {
-    public static void main(String[] args) throws Exception {
+
+
+  /*  public static void main(String[] args) throws Exception {
         new HelloWorldApplication().run("server", "/Users/mkhanwalkar/GraphDB/src/main/java/trial/rest/configuration.yml");
-    }
+    }*/
 
     @Override
     public String getName() {

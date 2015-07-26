@@ -1,6 +1,7 @@
 package graphdb;
 
 import server.Service;
+import trial.rest.HelloWorldApplication;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,12 @@ public class RestService implements Service {
 
     @Override
     public void init() {
+
+        try {
+            new HelloWorldApplication().run("server", "/Users/mkhanwalkar/GraphDB/src/main/java/trial/rest/configuration.yml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
