@@ -15,16 +15,16 @@ public class ClientTester {
         request.setId("DP1");
         request.setOperation(DBOperation.Query);
 
-         ObjectMapper mapper = new ObjectMapper();
+       //  ObjectMapper mapper = new ObjectMapper();
 
-        String s = mapper.writeValueAsString(request);
+       // String s = mapper.writeValueAsString(request);
 
-        System.out.println(s);
+        //System.out.println(s);
 
 //
-  //      Response response = client.send("db1",request);
+        Response response = client.send("db1",request);
 
-        //System.out.println(response);
+        System.out.println(response);
 
     }
 

@@ -17,6 +17,7 @@ public class GraphDBClient {
     private GraphDBClient()
     {
         connector = new RestConnector();
+        connector.connect();
 
     }
 
@@ -35,14 +36,7 @@ public class GraphDBClient {
     //TODO - add actual rest call here later
     public Response send(String dbName ,Request request) {
 
-//        GraphDB db = ((DBService) Server.getService("DBService")).getDatabase(dbName);
-
-  //      Response response = db.query(request);
-
-    //    System.out.println(response);
-
-
-        return null ;
+        return connector.send(request);
 
     }
 

@@ -27,6 +27,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import query.Request;
+import query.Response;
 
 public class RestConnector  {
 
@@ -37,7 +39,7 @@ public class RestConnector  {
 
     public RestConnector()
     {
-        this.port = 8080;
+        this.port = 10005;
         this.host = "localhost" ;
     }
 
@@ -63,6 +65,14 @@ public class RestConnector  {
 
     public void disconnect() {
         restTemplate = null;
+    }
+
+    public Response send(Request request)
+    {
+        HttpEntity<Request> requestEntity = new HttpEntity<>(request);
+        ResponseEntity<Response> response1 = restTemplate.exchange("http://" + host + ":" + port +  "/hello-world", HttpMethod.POST, requestEntity, Response.class);
+
+        return response1.getBody();
     }
 
 /*
