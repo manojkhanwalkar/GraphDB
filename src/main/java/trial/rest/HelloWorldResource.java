@@ -2,12 +2,16 @@ package trial.rest;
 
 import com.google.common.base.Optional;
 import com.codahale.metrics.annotation.Timed;
+import graphdb.DBService;
+import graphdb.GraphDB;
+import query.Request;
 import query.Response;
+import server.Server;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,12 +22,22 @@ public class HelloWorldResource {
     public HelloWorldResource() {
     }
 
-    @GET
-    @Timed
-    public Response sayHello() {
-      //  final String value = String.format(template, name.or(defaultName));
-       // return new Saying(counter.incrementAndGet(), value);
 
-        return new Response();
+ /*
+
+    @Path(value = "/matchdevice")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response matchDevice(@Context HttpServletRequest hsReq, @Valid final MatchDeviceRequest request) throws Exception {
+        final Boolean enableRestEndPoint = (Boolean) ApiConfig.INSTANCE.getValue(ApiConfig.ENABLE_MATCH_DEVICE);
+  */
+
+    @POST
+    public Response sayHello(@Context HttpServletRequest hsReq, @Valid Request request) {
+
+
+        GraphDB db = ((DBService) Server.getService("DBService")).getDatabase("db1");
+        Response response = db.query(request);
+
+        return response;
     }
 }

@@ -1,5 +1,6 @@
 import client.GraphDBClient;
 import graphdb.DBOperation;
+import org.codehaus.jackson.map.ObjectMapper;
 import query.Request;
 import query.Response;
 
@@ -8,15 +9,22 @@ import query.Response;
  */
 public class ClientTester {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  throws Exception {
         GraphDBClient client = GraphDBClient.getInstance();
         Request request = new Request();
         request.setId("DP1");
         request.setOperation(DBOperation.Query);
 
-        Response response = client.send("db1",request);
+         ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println(response);
+        String s = mapper.writeValueAsString(request);
+
+        System.out.println(s);
+
+//
+  //      Response response = client.send("db1",request);
+
+        //System.out.println(response);
 
     }
 
