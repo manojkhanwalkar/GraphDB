@@ -22,7 +22,10 @@ public class Response {
 
     public String toString()
     {
-        return node.toString();
+        if (node!=null)
+            return node.toString();
+        else
+            return "Hello World";
     }
 
 }
