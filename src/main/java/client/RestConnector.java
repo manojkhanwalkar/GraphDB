@@ -1,0 +1,115 @@
+package client;
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+public class RestConnector  {
+
+    private final int port ;
+    private final String host ;
+
+    RestTemplate restTemplate ;
+
+    public RestConnector()
+    {
+        this.port = 8080;
+        this.host = "localhost" ;
+    }
+
+
+    public RestConnector(String host, int port)
+    {
+        this.port = port ;
+        this.host = host ;
+     //   this.protocol = protocol;
+
+    }
+
+
+
+    public void connect() {
+
+
+        restTemplate = new RestTemplate();
+
+        System.out.println("Rest adapter initialized and connected");
+    }
+
+
+    public void disconnect() {
+        restTemplate = null;
+    }
+
+/*
+    public void send(RequestFutureTask task)
+    {
+        Response response = send(task.getProcessor().getRequest());
+        task.getProcessor().setResponse(response);
+        task.run();
+    }
+
+
+    private Response send(Request request) {
+
+        Response response = null ;
+
+        switch(request.getRequestType())
+        {
+            case HEALTHCHECK :
+                ResponseEntity<HealthResponse> responseEntity = restTemplate.getForEntity(protocol+"://" + host + ":" + port + request.getService() , HealthResponse.class);
+                response = responseEntity.getBody();
+                break ;
+            case MATCHDEVICE :
+                HttpHeaders requestHeaders = new HttpHeaders();
+                MatchDeviceRequest mdr = (MatchDeviceRequest)request;
+
+                String str = null;
+                try {
+                    str = clientId + "_" + HashUtil.getHash(mdr.getTime(),secret);
+                } catch (Exception ex) {
+                    Logger.getLogger(RestConnectionAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                requestHeaders.set("Authorization", str);
+
+                HttpEntity<MatchDeviceRequest> requestEntity = new HttpEntity<>(mdr, requestHeaders);
+                ResponseEntity<MatchDeviceResponse> response1 = restTemplate.exchange(protocol+"://" + host + ":" + port +  request.getService(), HttpMethod.POST, requestEntity, MatchDeviceResponse.class);
+
+                response = response1.getBody();
+
+        }
+
+        //  System.out.println(response.toString());
+
+
+        return response;
+
+    }
+*/
+
+
+}

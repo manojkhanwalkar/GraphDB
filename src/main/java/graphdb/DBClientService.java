@@ -51,24 +51,6 @@ public class DBClientService implements Service {
 
    }
 
-    private void query()
-    {
-        GraphDB db = ((DBService)Server.getService("DBService")).getDatabase("db1");
-
-//        db.deleteNode("DP60");
-
-        //db.deleteRelationship("DP54","IP77");
-
-        Request request = new Request();
-        request.setId("DP54");
-        Response response = db.query(request);
-
-        System.out.println(response);
-
-
-
-    }
-
 
 
 
@@ -77,7 +59,6 @@ public class DBClientService implements Service {
 
         addData();
 
-        query();
 
 
     }

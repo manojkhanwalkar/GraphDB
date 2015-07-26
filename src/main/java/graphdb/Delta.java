@@ -15,17 +15,17 @@ public class Delta {
     4. For delete relation ship - src and tgt node id
      */
 
-    DeltaOperation operation ;
+    DBOperation operation ;
     String srcId;
     String tgtId;
 
     Node srcNode ;
 
-    public DeltaOperation getOperation() {
+    public DBOperation getOperation() {
         return operation;
     }
 
-    public void setOperation(DeltaOperation operation) {
+    public void setOperation(DBOperation operation) {
         this.operation = operation;
     }
 

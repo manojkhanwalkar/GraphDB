@@ -84,7 +84,7 @@ public class GraphDB {
             maps.put(id, n);
             if (running) {
                 Delta d = new Delta();
-                d.setOperation(DeltaOperation.AddNode);
+                d.setOperation(DBOperation.AddNode);
                 d.setSrcNode(n);
                 deltaWriter.write(d);
             }
@@ -107,7 +107,7 @@ public class GraphDB {
             n2.removeRelationship(n1);
             if (running) {
                 Delta d = new Delta();
-                d.setOperation(DeltaOperation.DeleteRelation);
+                d.setOperation(DBOperation.DeleteRelation);
                 d.setSrcId(n1.getId());
                 d.setTgtId(n1.getId());
                 deltaWriter.write(d);
@@ -121,7 +121,7 @@ public class GraphDB {
         final Node n = maps.remove(id);
         if (running) {
             Delta d = new Delta();
-            d.setOperation(DeltaOperation.DeleteNode);
+            d.setOperation(DBOperation.DeleteNode);
             d.setSrcNode(n);
             deltaWriter.write(d);
         }
@@ -157,7 +157,7 @@ public class GraphDB {
         child.addRelationship(parent);
         if (running) {
             Delta d = new Delta();
-            d.setOperation(DeltaOperation.AddRelation);
+            d.setOperation(DBOperation.AddRelation);
             d.setSrcId(parent.getId());
             d.setTgtId(parent.getId());
             deltaWriter.write(d);
