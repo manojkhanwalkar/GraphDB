@@ -37,11 +37,11 @@ public class RestConnector  {
 
     RestTemplate restTemplate ;
 
-    public RestConnector()
+   /* public RestConnector()
     {
         this.port = 10005;
         this.host = "localhost" ;
-    }
+    }*/
 
 
     public RestConnector(String host, int port)

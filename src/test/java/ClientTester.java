@@ -23,6 +23,9 @@ public class ClientTester {
 
     public static void main(String[] args)  throws Exception {
 
+        String clusterName = "cluster1";
+        String clusterName1 = "cluster2";
+
  /*       for (int j=0;j<1;j++) {
 
             Thread t = new Thread(()-> {
@@ -55,49 +58,63 @@ public class ClientTester {
        // GraphDB db = ((DBService) Server.getService("DBService")).getDatabase("db1");
         GraphDBClient client = GraphDBClient.getInstance();
 
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
+        client.addCluster(clusterName,10005);
+        client.addCluster(clusterName,"localhost");
+        client.addCluster(clusterName1,10015);
+        client.addCluster(clusterName1,"localhost");
 
-            String s = null ;
-            while ((s=reader.readLine()) != null)
-            {
-                //  System.out.println(s);
-                String[] sA = s.split(",");
 
-                Request request = new Request();
-                request.setId(sA[0]);
-               // request.setName(sA[0]);
-                request.setOperation(DBOperation.AddNode);
-                request.setDbName("db1");
-                Response response = client.send(request);
-                System.out.println(response);
+        for (int j=0;j<2;j++) {
 
-                for (int i=1;i<sA.length;i++)
-                {
-   //                 Node child = db.createOrGetNode( sA[i]);
-                    Request child = new Request();
-                    child.setId(sA[i]);
-                   // child.setName(sA[i]);
-                    child.setOperation(DBOperation.AddNode);
-                    child.setDbName("db1");
-                     response = client.send(child);
+            String clusterToUse ;
+            if (j%2==0)
+                clusterToUse = clusterName;
+            else
+                clusterToUse = clusterName1;
+
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
+
+                String s = null;
+                while ((s = reader.readLine()) != null) {
+                    //  System.out.println(s);
+                    String[] sA = s.split(",");
+
+                    Request request = new Request();
+                    request.setId(sA[0]);
+                    // request.setName(sA[0]);
+                    request.setOperation(DBOperation.AddNode);
+                    request.setDbName("db1");
+                    Response response = client.send(clusterToUse, request);
                     System.out.println(response);
 
-                    Request relation = new Request();
-                    relation.setId(sA[0]);
-                    relation.setTgtId(sA[i]);
-                    relation.setOperation(DBOperation.AddRelation);
-                    relation.setDbName("db1");
-                    response = client.send(relation);
-                    System.out.println(response);
+                    for (int i = 1; i < sA.length; i++) {
+                        //                 Node child = db.createOrGetNode( sA[i]);
+                        Request child = new Request();
+                        child.setId(sA[i]);
+                        // child.setName(sA[i]);
+                        child.setOperation(DBOperation.AddNode);
+                        child.setDbName("db1");
+                        response = client.send(clusterToUse, child);
+                        System.out.println(response);
+
+                        Request relation = new Request();
+                        relation.setId(sA[0]);
+                        relation.setTgtId(sA[i]);
+                        relation.setOperation(DBOperation.AddRelation);
+                        relation.setDbName("db1");
+                        response = client.send(clusterToUse, relation);
+                        System.out.println(response);
+
+                    }
+
 
                 }
 
-
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
 

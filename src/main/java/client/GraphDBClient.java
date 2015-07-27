@@ -7,12 +7,15 @@ import query.Request;
 import query.Response;
 import server.Server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by mkhanwalkar on 7/25/15.
  */
 public class GraphDBClient {
 
-    ThreadLocal<RestConnector> localConnector = new ThreadLocal<>();
+    ThreadLocal<Map<String,RestConnector>> localConnector = new ThreadLocal<>();
 
     private GraphDBClient()
     {
@@ -30,16 +33,35 @@ public class GraphDBClient {
 
     }
 
+    Map<String,Integer> ports = new HashMap<>();
+    Map<String,String> hosts = new HashMap<>();
+
+    public void addCluster(String name , int port)
+    {
+        ports.put(name,port);
+    }
+
+    public void addCluster(String name , String host)
+    {
+        hosts.put(name,host);
+    }
 
 
-    public Response send(Request request) {
+    public Response send(String clusterName , Request request) {
 
-        RestConnector connector = localConnector.get();
+        Map<String,RestConnector> connectors = localConnector.get();
+        if (connectors==null)
+        {
+            connectors = new HashMap<>();
+            localConnector.set(connectors);
+        }
+
+        RestConnector connector = connectors.get(clusterName);
         if (connector==null)
         {
-            connector = new RestConnector();
+            connector = new RestConnector(hosts.get(clusterName), ports.get(clusterName));
             connector.connect();
-            localConnector.set(connector);
+            connectors.put(clusterName,connector);
 
         }
 
