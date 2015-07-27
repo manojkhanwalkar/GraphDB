@@ -17,6 +17,16 @@ public class DBService implements Service {
 
     String name ;
 
+    String clusterName;
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
+
     int snapShotInterval = 5;
 
     public int getSnapShotInterval() {
@@ -61,7 +71,7 @@ public class DBService implements Service {
 
         for (String name : dbNames) {
 
-            GraphDB db = GraphDbFactory.getInstance().createDB(location,name);
+            GraphDB db = GraphDbFactory.getInstance().createDB(location,clusterName,name);
 
             db.restore();
 

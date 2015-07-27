@@ -17,9 +17,9 @@ public class GraphDbFactory {
 
     }
 
-    public GraphDB createDB(String location , String fileName)
+    public GraphDB createDB(String location , String clusterName , String dbName)
     {
-        return new GraphDB(location , fileName);
+        return new GraphDB(location,clusterName,dbName);
     }
 
 

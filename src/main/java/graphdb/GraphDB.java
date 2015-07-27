@@ -9,32 +9,35 @@ import query.Request;
 import query.Response;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GraphDB {
 
 
-    String fileName, location;
+    String dbName, location, clusterName;
+
+    String completeLocation;
 
     SnapshotReader snapshotReader ;
     DeltaReader deltaReader;
     SnapshotWriter snapshotWriter;
     DeltaWriter deltaWriter;
 
-    protected GraphDB(String location, String fileName) {
-        this.fileName = fileName;
+    protected GraphDB(String location, String clusterName , String dbName) {
+        this.dbName = dbName;
         this.location = location;
+        this.clusterName = clusterName;
+
+        this.completeLocation = location+clusterName+"/" + dbName +"/";
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getDbName() {
+        return dbName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
     }
 
     String nodeFileName;
@@ -59,19 +62,19 @@ public class GraphDB {
     File deltaFile ;
 
 
-    final String snap = ".snap";
+    final String snap = "snap";
 
    public Map<String, Node> maps = new HashMap<>();  // TODO - fix public access .
 
     boolean running = false ; // used to ensure that deltas are not written during recovery
 
     public void init() {
-        this.nodeFileName =  fileName + ".node";
-        this.relationFileName = fileName + ".relation";
+        this.nodeFileName =   "node";
+        this.relationFileName =  "relation";
 
-        snapshotReader = new SnapshotReader(location,this);
-        snapshotWriter = new SnapshotWriter(location,this);
-        deltaReader = new DeltaReader(location,this);
+        snapshotReader = new SnapshotReader(completeLocation,this);
+        snapshotWriter = new SnapshotWriter(completeLocation,this);
+        deltaReader = new DeltaReader(completeLocation,this);
 
     }
 
@@ -81,7 +84,7 @@ public class GraphDB {
        // save(nodeFileName, relationFileName);
         deltaWriter.save();
         snapshot();
-        deltaWriter= new DeltaWriter(location,fileName+".delta");
+        deltaWriter= new DeltaWriter(completeLocation, "delta");
 
     }
 
@@ -211,7 +214,7 @@ public class GraphDB {
         snapshotReader.restore();
         File nodeFile =  snapshotReader.getLatestNodeFile();
         deltaFile = deltaReader.getLatestNodeFile();
-        deltaWriter = new DeltaWriter(location,fileName+".delta");
+        deltaWriter = new DeltaWriter(completeLocation, "delta");
 
         if (deltaFile!=null && (nodeFile==null || deltaFile.lastModified() > nodeFile.lastModified()))
         {
