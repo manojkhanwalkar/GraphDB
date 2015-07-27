@@ -177,7 +177,7 @@ public class GraphDB {
     }
 
     // Node are assumed to exist and only relationships will be added .
-    public void addRelationship(Node parent, Node child) {
+    public synchronized void addRelationship(Node parent, Node child) {
         parent.addRelationship(child);
         child.addRelationship(parent);
         if (running) {

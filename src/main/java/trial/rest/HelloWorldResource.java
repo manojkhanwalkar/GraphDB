@@ -37,7 +37,7 @@ public class HelloWorldResource {
 
 
         GraphDB db = ((DBService) Server.getService("DBService")).getDatabase(request.getDbName());
-        Response response;
+        Response response=null;
 
         switch (request.getOperation())
         {
@@ -48,6 +48,11 @@ public class HelloWorldResource {
                 Node n = db.createOrGetNode(request.getId());
                 response = new Response();
                 response.setNode(n);
+                break;
+            case AddRelation:
+                Node n1 = db.createOrGetNode(request.getId());
+                Node n2 = db.createOrGetNode(request.getTgtId());
+                db.addRelationship(n1,n2);
                 break;
             default :
                 response = null;

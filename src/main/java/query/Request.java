@@ -29,7 +29,18 @@ public class Request
     }
 
     String id ;
+
+    String tgtId;
     //NodeType type ;
+
+
+    public String getTgtId() {
+        return tgtId;
+    }
+
+    public void setTgtId(String tgtId) {
+        this.tgtId = tgtId;
+    }
 
     public String getId() {
         return id;

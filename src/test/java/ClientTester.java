@@ -82,7 +82,14 @@ public class ClientTester {
                     child.setDbName("db1");
                      response = client.send(child);
                     System.out.println(response);
-//                    db.add(dp,child);
+
+                    Request relation = new Request();
+                    relation.setId(sA[0]);
+                    relation.setTgtId(sA[i]);
+                    relation.setOperation(DBOperation.AddRelation);
+                    relation.setDbName("db1");
+                    response = client.send(relation);
+                    System.out.println(response);
 
                 }
 
