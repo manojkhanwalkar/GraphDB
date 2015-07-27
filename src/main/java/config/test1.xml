@@ -23,11 +23,10 @@
         <property name="dbNames">
             <list>
                 <value>db1</value>
-                <value>db2</value>
             </list>
         </property>
         <property name="name" value="DBService" />
-        <property name="clusterName" value="cluster1" />
+        <property name="clusterName" value="cluster2" />
         <property name="snapShotInterval" value="5000" />
 
     </bean>
@@ -38,7 +37,7 @@
 
     <bean id="RestService" class="graphdb.RestService">
         <property name="name" value="RestService" />
-        <property name="restConfigName" value="/Users/mkhanwalkar/GraphDB/src/main/java/trial/rest/configuration.yml" />
+        <property name="restConfigName" value="/Users/mkhanwalkar/GraphDB/src/main/java/trial/rest/configuration1.yml" />
 
     </bean>
 

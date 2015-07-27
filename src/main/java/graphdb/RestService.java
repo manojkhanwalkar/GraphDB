@@ -16,13 +16,21 @@ public class RestService implements Service {
 
     String name ;
 
+    String restConfigName;
 
+    public String getRestConfigName() {
+        return restConfigName;
+    }
+
+    public void setRestConfigName(String restConfigName) {
+        this.restConfigName = restConfigName;
+    }
 
     @Override
     public void init() {
 
         try {
-            new HelloWorldApplication().run("server", "/Users/mkhanwalkar/GraphDB/src/main/java/trial/rest/configuration.yml");
+            new HelloWorldApplication().run("server", restConfigName);
         } catch (Exception e) {
             e.printStackTrace();
         }
