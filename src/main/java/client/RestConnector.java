@@ -62,6 +62,13 @@ public class RestConnector  {
         System.out.println("Rest adapter initialized and connected");
     }
 
+    public void finalize()
+    {
+        disconnect();
+
+        System.out.println("Finalizer called ");
+    }
+
 
     public void disconnect() {
         restTemplate = null;

@@ -29,8 +29,32 @@ public class GraphDB {
         this.location = location;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     String nodeFileName;
     String relationFileName;
+
+    public String getNodeFileName() {
+        return nodeFileName;
+    }
+
+    public void setNodeFileName(String nodeFileName) {
+        this.nodeFileName = nodeFileName;
+    }
+
+    public String getRelationFileName() {
+        return relationFileName;
+    }
+
+    public void setRelationFileName(String relationFileName) {
+        this.relationFileName = relationFileName;
+    }
 
     File deltaFile ;
 

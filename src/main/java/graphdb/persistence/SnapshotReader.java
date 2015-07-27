@@ -95,9 +95,9 @@ public class SnapshotReader {
 
     public void restore() {
      //   graphDB.init();
-        latestNodeFile = getLatestFile(".node.",location);
+        latestNodeFile = getLatestFile(graphDB.getNodeFileName()+".node.",location);
         restoreNode(latestNodeFile);
-        restoreRelations(getLatestFile(".relation.",location));
+        restoreRelations(getLatestFile(graphDB.getRelationFileName()+".relation.",location));
 
 //        System.out.println(maps);
 

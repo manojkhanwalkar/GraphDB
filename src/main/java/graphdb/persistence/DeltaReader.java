@@ -82,7 +82,7 @@ public class DeltaReader {
 
     public File getLatestNodeFile()
     {
-        latestNodeFile = getLatestFile(".delta.",location);
+        latestNodeFile = getLatestFile(graphDB.getFileName()+".delta.",location);
 
         return latestNodeFile;
     }

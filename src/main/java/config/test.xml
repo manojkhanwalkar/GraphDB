@@ -23,6 +23,7 @@
         <property name="dbNames">
             <list>
                 <value>db1</value>
+                <value>db2</value>
             </list>
         </property>
         <property name="name" value="DBService" />

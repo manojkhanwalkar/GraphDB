@@ -9,19 +9,23 @@ import query.Response;
  */
 public class ClientTester {
 
+    //TODO - multiple databases
+    //TODO - different operation types
+
+
     public static void main(String[] args)  throws Exception {
 
-        for (int j=0;j<10;j++) {
+        for (int j=0;j<1;j++) {
 
             Thread t = new Thread(()-> {
 
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 1; i++) {
                 GraphDBClient client = GraphDBClient.getInstance();
                 Request request = new Request();
                 request.setId("DP5");
                 request.setOperation(DBOperation.Query);
-                request.setDbName("db1");
+                request.setDbName("db2");
 
                 //  ObjectMapper mapper = new ObjectMapper();
 
