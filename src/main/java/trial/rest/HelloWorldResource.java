@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.codahale.metrics.annotation.Timed;
 import graphdb.DBService;
 import graphdb.GraphDB;
+import graphdb.Node;
 import query.Request;
 import query.Response;
 import server.Server;
@@ -43,6 +44,11 @@ public class HelloWorldResource {
             case Query:
               response   = db.query(request);
               break ;
+            case AddNode:
+                Node n = db.createOrGetNode(request.getId());
+                response = new Response();
+                response.setNode(n);
+                break;
             default :
                 response = null;
 

@@ -1,8 +1,16 @@
 import client.GraphDBClient;
 import graphdb.DBOperation;
+import graphdb.DBService;
+import graphdb.GraphDB;
+import graphdb.Node;
 import org.codehaus.jackson.map.ObjectMapper;
 import query.Request;
 import query.Response;
+import server.Server;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Created by mkhanwalkar on 7/26/15.
@@ -15,7 +23,7 @@ public class ClientTester {
 
     public static void main(String[] args)  throws Exception {
 
-        for (int j=0;j<1;j++) {
+ /*       for (int j=0;j<1;j++) {
 
             Thread t = new Thread(()-> {
 
@@ -42,7 +50,50 @@ public class ClientTester {
 
             t.start();
 
+        }*/
+
+       // GraphDB db = ((DBService) Server.getService("DBService")).getDatabase("db1");
+        GraphDBClient client = GraphDBClient.getInstance();
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("/Users/mkhanwalkar/test/data/input.txt"));
+
+            String s = null ;
+            while ((s=reader.readLine()) != null)
+            {
+                //  System.out.println(s);
+                String[] sA = s.split(",");
+
+                Request request = new Request();
+                request.setId(sA[0]);
+               // request.setName(sA[0]);
+                request.setOperation(DBOperation.AddNode);
+                request.setDbName("db1");
+                Response response = client.send(request);
+                System.out.println(response);
+
+                for (int i=1;i<sA.length;i++)
+                {
+   //                 Node child = db.createOrGetNode( sA[i]);
+                    Request child = new Request();
+                    child.setId(sA[i]);
+                   // child.setName(sA[i]);
+                    child.setOperation(DBOperation.AddNode);
+                    child.setDbName("db1");
+                     response = client.send(child);
+                    System.out.println(response);
+//                    db.add(dp,child);
+
+                }
+
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
 
     }
 
