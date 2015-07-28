@@ -11,6 +11,7 @@ import query.Response;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GraphDB {
 
@@ -91,15 +92,31 @@ public class GraphDB {
 
 
     public synchronized Response query(Request request) {
-        Node n = maps.get(request.getId());
-        if (n != null) {
+
+        {
+            StringBuilder responseBuilder = new StringBuilder();
+            Node n = maps.get(request.getId());
+            Set<Relationship> relations = n.returnRelationship();
+            relations.stream().forEach(r-> {
+                Node tgt = r.getTarget();
+                tgt.returnRelationship().forEach(t->{
+                    responseBuilder.append(tgt.getId() + "  " + t.getTarget().getId() + ",");
+                });
+            });
+
             Response response = new Response();
+            response.setRelString(responseBuilder.toString());
+            return response;
+
+        }
+
+     /*   Node n = maps.get(request.getId());
+        if (n != null) {
             response.setNode(n);
             response.setRelString(n.returnRelationship().toString());
             return response;
-        }
+        }*/
 
-        return null;
     }
 
 

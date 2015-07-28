@@ -19,8 +19,6 @@ import java.util.Set;
  */
 public class ClientTester {
 
-    //TODO - multiple databases
-    //TODO - different operation types
 
 
     public static void main(String[] args)  throws Exception {
@@ -65,7 +63,7 @@ public class ClientTester {
         client.addCluster(clusterName1,10015);
         client.addCluster(clusterName1,"localhost");
 
-        Set<String> ids = new HashSet<>();
+   /*     Set<String> ids = new HashSet<>();
 
 
         for (int j=0;j<1;j++) {
@@ -119,18 +117,29 @@ public class ClientTester {
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
-            ids.stream().forEach(s->{
+         /*   ids.stream().forEach(s->{
                 Request child = new Request();
                 child.setId(s);
                 child.setOperation(DBOperation.DeleteNode);
                 child.setDbName("db1");
                 client.send(clusterToUse, child);
 
-            });
+            });*/
+            {
 
-        }
+                Request relation = new Request();
+                relation.setId("CK1");
+                relation.setOperation(DBOperation.Query);
+                relation.setDbName("db1");
+                Response response = client.send(clusterName, relation);
+                System.out.println(response);
+
+            }
+
+
+      //  }
 
 
 
