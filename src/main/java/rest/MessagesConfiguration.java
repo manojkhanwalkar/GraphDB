@@ -1,4 +1,4 @@
-package trial.rest;
+package rest;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,7 +1,7 @@
 package graphdb;
 
 import server.Service;
-import trial.rest.GraphApplication;
+import rest.GraphApplication;
 
 public class RestService implements Service {
 

@@ -1,4 +1,4 @@
-package trial.rest;
+package rest;
 
 import com.google.common.base.Optional;
 import com.codahale.metrics.annotation.Timed;

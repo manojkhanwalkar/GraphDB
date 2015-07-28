@@ -1,4 +1,4 @@
-package trial.rest;
+package rest;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
