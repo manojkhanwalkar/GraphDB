@@ -4,7 +4,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-public class HelloWorldApplication extends Application<ExampleServiceConfiguration> {
+public class GraphApplication extends Application<ExampleServiceConfiguration> {
 
 
   /*  public static void main(String[] args) throws Exception {
@@ -26,7 +26,7 @@ public class HelloWorldApplication extends Application<ExampleServiceConfigurati
                     Environment environment) {
         // nothing to do yet
 
-        final HelloWorldResource resource = new HelloWorldResource();
+        final GraphResource resource = new GraphResource();
         environment.jersey().register(resource);
     }
 

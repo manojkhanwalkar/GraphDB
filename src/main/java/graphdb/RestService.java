@@ -1,14 +1,7 @@
 package graphdb;
 
 import server.Service;
-import trial.rest.HelloWorldApplication;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import trial.rest.GraphApplication;
 
 public class RestService implements Service {
 
@@ -30,7 +23,7 @@ public class RestService implements Service {
     public void init() {
 
         try {
-            new HelloWorldApplication().run("server", restConfigName);
+            new GraphApplication().run("server", restConfigName);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Path("/graphdb")
 @Produces(MediaType.APPLICATION_JSON)
-public class HelloWorldResource {
+public class GraphResource {
 
-    public HelloWorldResource() {
+    public GraphResource() {
     }
 
 
