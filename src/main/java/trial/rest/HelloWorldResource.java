@@ -16,7 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Path("/hello-world")
+@Path("/graphdb")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
 

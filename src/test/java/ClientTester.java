@@ -64,7 +64,7 @@ public class ClientTester {
         client.addCluster(clusterName1,"localhost");
 
 
-        for (int j=0;j<2;j++) {
+        for (int j=0;j<1;j++) {
 
             String clusterToUse ;
             if (j%2==0)
