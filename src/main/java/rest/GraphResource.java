@@ -49,11 +49,18 @@ public class GraphResource {
                 response = new Response();
                 response.setNode(n);
                 break;
-            case AddRelation:
+            case AddRelation: {
                 Node n1 = db.createOrGetNode(request.getId());
                 Node n2 = db.createOrGetNode(request.getTgtId());
-                db.addRelationship(n1,n2);
+                db.addRelationship(n1, n2);
                 break;
+            }
+            case DeleteRelation: {
+                db.deleteRelationship(request.getId(), request.getTgtId());
+                break;
+            }
+            case DeleteNode:
+                db.deleteNode(request.getId());
             default :
                 response = null;
 

@@ -11,6 +11,8 @@ import server.Server;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by mkhanwalkar on 7/26/15.
@@ -63,6 +65,8 @@ public class ClientTester {
         client.addCluster(clusterName1,10015);
         client.addCluster(clusterName1,"localhost");
 
+        Set<String> ids = new HashSet<>();
+
 
         for (int j=0;j<1;j++) {
 
@@ -82,6 +86,7 @@ public class ClientTester {
 
                     Request request = new Request();
                     request.setId(sA[0]);
+                    ids.add(sA[0]);
                     // request.setName(sA[0]);
                     request.setOperation(DBOperation.AddNode);
                     request.setDbName("db1");
@@ -92,6 +97,7 @@ public class ClientTester {
                         //                 Node child = db.createOrGetNode( sA[i]);
                         Request child = new Request();
                         child.setId(sA[i]);
+                        ids.add(sA[i]);
                         // child.setName(sA[i]);
                         child.setOperation(DBOperation.AddNode);
                         child.setDbName("db1");
@@ -114,6 +120,15 @@ public class ClientTester {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            ids.stream().forEach(s->{
+                Request child = new Request();
+                child.setId(s);
+                child.setOperation(DBOperation.DeleteNode);
+                child.setDbName("db1");
+                client.send(clusterToUse, child);
+
+            });
 
         }
 
