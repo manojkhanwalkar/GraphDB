@@ -46,15 +46,18 @@ public class DeltaReader {
               switch (delta.getOperation())
               {
                   case AddNode :
-                      graphDB.maps.put(delta.getSrcId(), delta.getSrcNode());
+                      if (delta.getSrcId() != null && delta.getSrcNode() != null)
+                          graphDB.maps.put(delta.getSrcId(), delta.getSrcNode());
                       break ;
                   case DeleteNode :
-                      graphDB.maps.remove(delta.getSrcId());
+                      if (delta.getSrcId() != null)
+                          graphDB.deleteNode(delta.getSrcId());
                       break;
                   case AddRelation :
                       Node n1 = graphDB.maps.get(delta.getSrcId());
                       Node n2 = graphDB.maps.get(delta.getTgtId());
-                      graphDB.addRelationship(n1, n2);
+                      if (n1 != null && n2 != null)
+                          graphDB.addRelationship(n1, n2);
                       break ;
                   case DeleteRelation :
                       graphDB.deleteRelationship(delta.getSrcId(),delta.getTgtId());

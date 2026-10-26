@@ -76,8 +76,9 @@ public class Server {
                 s.init();
             }
         } catch (Exception e) {
-
-            e.printStackTrace();
+            // Fail fast: continuing with a partially initialised service list leaves the
+            // server running in an undefined state.
+            throw new IllegalStateException("Server initialisation failed", e);
         }
 
     }
