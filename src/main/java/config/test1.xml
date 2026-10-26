@@ -19,7 +19,8 @@
     </bean>
 
     <bean id="DBService" class="graphdb.DBService">
-        <property name="location" value="/tmp/" />
+        <!-- Keep data out of shared, world-writable directories such as /tmp. -->
+        <property name="location" value="#{systemProperties['user.home']}/.graphdb/" />
         <property name="dbNames">
             <list>
                 <value>db1</value>

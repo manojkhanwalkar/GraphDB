@@ -25,7 +25,7 @@ public class RestService implements Service {
         try {
             new GraphApplication().run("server", restConfigName);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Failed to start REST service", e);
         }
 
 

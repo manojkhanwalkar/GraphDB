@@ -72,7 +72,8 @@ public class SnapshotReader {
                 Node n1 = graphDB.maps.get(rs.getSrcId());
                 Node n2 = graphDB.maps.get(rs.getTgtId());
 
-                graphDB.addRelationship(n1, n2);
+                if (n1 != null && n2 != null)
+                    graphDB.addRelationship(n1, n2);
             }
             reader.close();
 

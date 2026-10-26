@@ -6,8 +6,15 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Request
 {
+    public static final int MAX_ID_LENGTH = 256;
+
+    @NotNull
+    @Size(min = 1, max = MAX_ID_LENGTH)
     String dbName ;
 
     public String getDbName() {
@@ -18,6 +25,7 @@ public class Request
         this.dbName = dbName;
     }
 
+    @NotNull
     DBOperation operation;
 
     public DBOperation getOperation() {
@@ -28,8 +36,11 @@ public class Request
         this.operation = operation;
     }
 
+    @NotNull
+    @Size(min = 1, max = MAX_ID_LENGTH)
     String id ;
 
+    @Size(min = 1, max = MAX_ID_LENGTH)
     String tgtId;
     //NodeType type ;
 

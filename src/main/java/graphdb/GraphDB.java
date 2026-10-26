@@ -70,6 +70,7 @@ public class GraphDB {
     boolean running = false ; // used to ensure that deltas are not written during recovery
 
     public void init() {
+        prepareDataDirectory();
         this.nodeFileName =   "node";
         this.relationFileName =  "relation";
 
@@ -77,6 +78,36 @@ public class GraphDB {
         snapshotWriter = new SnapshotWriter(completeLocation,this);
         deltaReader = new DeltaReader(completeLocation,this);
 
+    }
+
+    /**
+     * Creates the database directory with owner-only permissions and refuses to use a
+     * directory that is a symlink or owned by another user. Snapshot and delta files are
+     * replayed into the graph on restart, so anyone able to write to this directory could
+     * inject data or redirect writes elsewhere.
+     */
+    void prepareDataDirectory() {
+        try {
+            java.nio.file.Path dir = java.nio.file.Paths.get(completeLocation);
+            boolean posix = java.nio.file.FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
+            if (!java.nio.file.Files.exists(dir, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+                java.nio.file.Files.createDirectories(dir);
+                if (posix) {
+                    java.nio.file.Files.setPosixFilePermissions(dir,
+                            java.nio.file.attribute.PosixFilePermissions.fromString("rwx------"));
+                }
+            }
+            if (java.nio.file.Files.isSymbolicLink(dir) || !java.nio.file.Files.isDirectory(dir, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+                throw new IllegalStateException("Database location is not a regular directory: " + dir);
+            }
+            String me = System.getProperty("user.name");
+            String owner = java.nio.file.Files.getOwner(dir, java.nio.file.LinkOption.NOFOLLOW_LINKS).getName();
+            if (me != null && !me.equals(owner)) {
+                throw new IllegalStateException("Database location " + dir + " is owned by " + owner + ", not " + me);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException("Cannot prepare database location " + completeLocation, e);
+        }
     }
 
     static ObjectMapper mapper = new ObjectMapper();
@@ -96,6 +127,9 @@ public class GraphDB {
         {
             StringBuilder responseBuilder = new StringBuilder();
             Node n = maps.get(request.getId());
+            if (n == null) {
+                return null;
+            }
             Set<Relationship> relations = n.returnRelationship();
             relations.stream().forEach(r-> {
                 Node tgt = r.getTarget();
@@ -130,6 +164,7 @@ public class GraphDB {
             if (running) {
                 Delta d = new Delta();
                 d.setOperation(DBOperation.AddNode);
+                d.setSrcId(id);
                 d.setSrcNode(n);
                 deltaWriter.write(d);
             }
@@ -154,7 +189,7 @@ public class GraphDB {
                 Delta d = new Delta();
                 d.setOperation(DBOperation.DeleteRelation);
                 d.setSrcId(n1.getId());
-                d.setTgtId(n1.getId());
+                d.setTgtId(n2.getId());
                 deltaWriter.write(d);
             }
 
@@ -164,10 +199,13 @@ public class GraphDB {
     public synchronized void deleteNode(String id) {
 
         final Node n = maps.remove(id);
+        if (n == null) {
+            return;
+        }
         if (running) {
             Delta d = new Delta();
             d.setOperation(DBOperation.DeleteNode);
-            d.setSrcNode(n);
+            d.setSrcId(id);
             deltaWriter.write(d);
         }
 
@@ -204,7 +242,7 @@ public class GraphDB {
             Delta d = new Delta();
             d.setOperation(DBOperation.AddRelation);
             d.setSrcId(parent.getId());
-            d.setTgtId(parent.getId());
+            d.setTgtId(child.getId());
             deltaWriter.write(d);
         }
 
