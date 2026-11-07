@@ -13,6 +13,9 @@ public class ServerShutDownHook implements Runnable {
     public void run()
     {
 
+        if (server.getList() == null)
+            return; // initialisation failed, nothing to stop
+
         server.stop();
 
         server.destroy();
